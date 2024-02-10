@@ -22,7 +22,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
-
 class TaskRepositoryImplTest {
     private static TaskRepository taskRepository;
 
