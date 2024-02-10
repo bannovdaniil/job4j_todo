@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head th:replace="~{blocks/base_head :: baseHead(~{::title})}">
+    <title th:inline="text">Фильм: [[${film.name}]]</title>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <header th:insert="~{blocks/header :: header}"></header>
+    <div class="container my-4">
+        <div th:object="${film}">
+            <div class="row mb-3">
+                <div class="col-2">
+                    <div class="mb-3">
+                        <img th:src="@{/files/{fileId}(fileId=*{fileId})}" class="w-100" alt="No image">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="mx-1 container">
+                        <div class="row">
+                            <h3 th:text="*{name}"></h3>
+                        </div>
+                        <div class="my-1 row">
+                            <span class="font-weight-bold">Год:&nbsp;</span>
+                            <span th:text="*{year}"/></span>
+                        </div>
+                        <div class="row">
+                            <span class="font-weight-bold">Жанр:&nbsp;</span>
+                            <span th:text="${film.genre.name}"></span>
+                        </div>
+                        <div class="row">
+                            <span class="font-weight-bold">Ограничение по возрасту:&nbsp;</span>
+                            <span th:text="*{minimalAge}"/></span>
+                        </div>
+                        <div class="row">
+                            <span class="font-weight-bold">Продолжительность:&nbsp;</span>
+                            <span th:text="${film.durationInMinutes}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <blockquote class="blockquote">
+                    <p class="mb-0 text-justify" th:text="*{description}"></p>
+                </blockquote>
+            </div>
+            <div class="row">
+                <div class="mb-3 col text-center">
+                    <a href="#" class="btn btn-secondary" onclick="history.back(1)"> Назад </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:insert="~{blocks/footer :: footer}"></footer>
+</div>
+</body>
+</html>
