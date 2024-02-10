@@ -26,13 +26,6 @@ import java.util.Properties;
 class TaskRepositoryImplTest {
     private static TaskRepository taskRepository;
 
-    @AfterEach
-    void wipeTable() throws SQLException {
-        taskRepository.findAll().forEach(
-                task -> taskRepository.delete(task.getId())
-        );
-    }
-
     @BeforeAll
     public static void initRepositories() throws Exception {
         var properties = new Properties();
@@ -62,6 +55,13 @@ class TaskRepositoryImplTest {
             e.printStackTrace();
         }
 
+    }
+
+    @AfterEach
+    void wipeTable() throws SQLException {
+        taskRepository.findAll().forEach(
+                task -> taskRepository.delete(task.getId())
+        );
     }
 
     @DisplayName("Save + findById")
