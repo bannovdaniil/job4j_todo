@@ -2,7 +2,35 @@
 
 #### Приложение "TODO список".
 
-**Стек технологий:** Spring boot, Thymeleaf, Bootstrap, Hibernate, PostgreSql, Liquibase
+**Функционал:**
+
+- Добавить задание
+- Удалить задание
+- Пометить задание выполненным
+- Пометить задание не выполненным
+
+### Стек:
+**Spring boot, Thymeleaf, Bootstrap, Hibernate, PostgreSql, Liquibase, jUnit5**
+
+### Требования:
+Postgres
+port: 5432
+db: j4j_todo_db
+> create database j4j_todo_db;
+
+user & password set in **application.properties**
+
+### Как запустить:
+Открыть проект в IDE выбрать файл Main выполнить.
+в браузере открыть
+http://localhost:8080/
+
+### Контакты
+
+https://github.com/bannovdaniil
+https://www.linkedin.com/in/bannovdaniil
+https://t.me/BannovDaniil
+
 
 **Виды.**
 - http://localhost:8080/
