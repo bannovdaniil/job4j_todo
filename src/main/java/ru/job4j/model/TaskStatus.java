@@ -1,5 +1,8 @@
 package ru.job4j.model;
 
+import lombok.Getter;
+
+@Getter
 public enum TaskStatus {
     DONE(true),
     TODO(false);
@@ -8,9 +11,5 @@ public enum TaskStatus {
 
     TaskStatus(boolean status) {
         this.status = status;
-    }
-
-    public boolean isStatus() {
-        return status;
     }
 }

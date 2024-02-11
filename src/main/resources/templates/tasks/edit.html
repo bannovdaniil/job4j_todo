@@ -16,11 +16,12 @@
                         <p class="text-danger" th:text="${error}"></p>
                     </div>
                     <div class="mb-3">
-                        <label class="font-weight-bold d-inline-block">Состояние:&nbsp; </label>
-                        <select class="form-control custom-select" id="status" name="done">
-                            <option value="true" th:selected="${task.done}">Выполнено</option>
-                            <option value="false" th:selected="${!task.done}">Не выполнено</option>
-                        </select>
+                        <label class="font-weight-bold d-inline-block">Состояние:&nbsp;
+                            <select class="form-control custom-select" id="status" name="done">
+                                <option value="true" th:selected="${task.done}">Выполнено</option>
+                                <option value="false" th:selected="${!task.done}">Не выполнено</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="mb-3">
                         <div th:inline="text">Создана: [[*{{created}}]]</div>

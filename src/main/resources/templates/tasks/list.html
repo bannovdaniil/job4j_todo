@@ -53,7 +53,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="task, item: ${tasks}"
-                        class="clickable-row" style='cursor: pointer; cursor: hand;'
+                        class="clickable-row" style='cursor: hand;'
                         th:onclick="|location.href='@{/tasks/{taskId}(taskId=*{task.id})}'|">
 
                         <th th:text="${item.index + 1}"/>
@@ -83,10 +83,9 @@
             </div>
         </div>
     </div>
-</div>
-<div>
-    <footer th:insert=" ~{blocks/footer :: footer}"></footer>
-</div>
+    <div>
+        <footer th:insert=" ~{blocks/footer :: footer}"></footer>
+    </div>
 </div>
 </body>
 </html>
