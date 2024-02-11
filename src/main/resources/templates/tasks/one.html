@@ -1,39 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head th:replace="~{blocks/base_head :: baseHead(~{::title})}">
-    <title th:inline="text">Фильм: [[${film.name}]]</title>
+    <title th:inline="text">Задача: [[${task.created}]]</title>
 </head>
 <body>
 <div class="container-fluid p-0">
     <header th:insert="~{blocks/header :: header}"></header>
     <div class="container my-4">
-        <div th:object="${film}">
+        <div th:object="${task}">
             <div class="row mb-3">
-                <div class="col-2">
-                    <div class="mb-3">
-                        <img th:src="@{/files/{fileId}(fileId=*{fileId})}" class="w-100" alt="No image">
-                    </div>
-                </div>
-                <div class="col-4">
+                <div class="col-auto">
                     <div class="mx-1 container">
                         <div class="row">
-                            <h3 th:text="*{name}"></h3>
+                            <span class="font-weight-bold">#:&nbsp;</span>
+                            <span class="font-weight-bold" th:text="*{id}"></span>
                         </div>
-                        <div class="my-1 row">
-                            <span class="font-weight-bold">Год:&nbsp;</span>
-                            <span th:text="*{year}"/></span>
-                        </div>
-                        <div class="row">
-                            <span class="font-weight-bold">Жанр:&nbsp;</span>
-                            <span th:text="${film.genre.name}"></span>
-                        </div>
-                        <div class="row">
-                            <span class="font-weight-bold">Ограничение по возрасту:&nbsp;</span>
-                            <span th:text="*{minimalAge}"/></span>
+                        <div class="my-2 row">
+                            <span class="font-weight-bold">Состояние:&nbsp;</span>
+                            <span th:if="${task.done}">
+                                <i class="bi bi-check-square"></i>
+                           </span>
+                            <span th:unless="${task.done}">
+                                <i class="bi bi-square"></i>
+                           </span>
                         </div>
                         <div class="row">
-                            <span class="font-weight-bold">Продолжительность:&nbsp;</span>
-                            <span th:text="${film.durationInMinutes}"></span>
+                            <span class="font-weight-bold">Время создания:&nbsp;</span>
+                            <span th:text="*{created}"></span>
                         </div>
                     </div>
                 </div>
@@ -44,8 +37,17 @@
                 </blockquote>
             </div>
             <div class="row">
-                <div class="mb-3 col text-center">
-                    <a href="#" class="btn btn-secondary" onclick="history.back(1)"> Назад </a>
+                <div class="col-auto text-center btn-group">
+                        <a th:href=" @{/}" class="mb-3 btn btn-outline-secondary mx-1"> К списку </a>
+                        <a th:href=" @{/tasks/add}" class="mb-3 btn btn-outline-primary"> Создать еще задачу </a>
+                </div>
+                <div class="mx-3 col-1"></div>
+                <div class="col-auto align-items-end btn-group">
+                    <a th:href="@{/tasks/delete/{id}(id=${task.id})}" class="mb-3 btn btn-outline-secondary">Удалить</a>
+                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="mb-3 btn btn-outline-primary mx-1">Редактировать</a>
+
+                    <a th:if="${task.done}" th:href="@{/tasks/switch/{id}(id=${task.id})}" class="mb-3 btn btn-success">Не выполнено</a>
+                    <a th:unless="${task.done}" th:href="@{/tasks/switch/{id}(id=${task.id})}" class="mb-3 btn btn-success">Выполнено</a>
                 </div>
             </div>
         </div>

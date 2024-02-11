@@ -11,6 +11,7 @@ import ru.job4j.model.Task;
 import ru.job4j.repository.TaskRepository;
 import ru.job4j.service.TaskService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,13 +21,18 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
     @Override
-    public Task save(TaskInDto dto) {
-        return taskRepository.save(taskMapper.map(dto));
+    public TaskOutDto save(TaskInDto dto) {
+        Task task = taskMapper.map(dto);
+        task.setDone(false);
+        task.setCreated(LocalDateTime.now());
+
+        return taskMapper.map(taskRepository.save(task));
     }
 
     @Override
-    public Task update(TaskUpdateDto dto) {
-        return taskRepository.update(taskMapper.map(dto));
+    public TaskOutDto update(TaskUpdateDto dto) {
+        Task task = taskMapper.map(dto);
+        return taskMapper.map(taskRepository.update(task));
     }
 
     @Override
@@ -51,5 +57,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskOutDto> findAllByStatus(Boolean status) {
         return taskMapper.map(taskRepository.findAllByStatus(status));
+    }
+
+    @Override
+    public TaskOutDto switchStatus(int taskId) throws NotFoundException {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(
+                        () -> new NotFoundException("Task don't exist.")
+                );
+        task.setDone(!task.getDone());
+
+        return taskMapper.map(taskRepository.update(task));
     }
 }
