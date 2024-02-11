@@ -12,32 +12,22 @@
         <div class="row">
             <div class="col-1 mx-5 h5 my-3">Задачи</div>
             <div class="col-9 mx-5 text-right">
-                <label class="mt-3 btn-group btn-group-toggle">
-                    <div th:if="${status == null}">
-                        <a th:href="@{/}" th:value="all" th:id="all" class="btn btn-sm btn-success bi-calendar-week">&nbsp;
-                            Все &nbsp;</a>
-                        <a th:href="@{/tasks/status/done}" th:value="done" th:id="done"
-                           class="btn btn-sm btn-outline-secondary bi-calendar-check">&nbsp; Выполненные &nbsp;</a>
-                        <a th:href="@{/tasks/status/todo}" th:id="todo"
-                           class="btn btn-sm btn-outline-secondary bi-calendar">&nbsp; Новые &nbsp;</a>
-                    </div>
+                <div th:if="${status == null}" class="mt-3 btn-group btn-group-toggle">
+                    <a th:href="@{/}" th:value="all" th:id="all" class="btn btn-sm btn-success bi-calendar-week">&nbsp; Все &nbsp;</a>
+                    <a th:href="@{/tasks/status/done}" th:value="done" th:id="done" class="btn btn-sm btn-outline-secondary bi-calendar-check">&nbsp; Выполненные &nbsp;</a>
+                    <a th:href="@{/tasks/status/todo}" th:id="todo" class="btn btn-sm btn-outline-secondary bi-calendar">&nbsp; Новые &nbsp;</a>
+                </div>
 
-                    <div th:unless="${status == null}">
-                        <a th:href="@{/}" th:value="all" th:id="all"
-                           class="btn btn-sm btn-outline-secondary bi-calendar-week">&nbsp; Все &nbsp;</a>
+                <div th:unless="${status == null}" class="mt-3 btn-group btn-group-toggle">
+                    <a th:href="@{/}" th:value="all" th:id="all" class="btn btn-sm btn-outline-secondary bi-calendar-week">&nbsp; Все &nbsp;</a>
 
-                        <span th:if="${status.equals('DONE')}">
-                           <a th:href="@{/tasks/status/done}" th:value="done" th:id="done"
-                              class="btn btn-sm btn-success bi-calendar-check">&nbsp; Выполненные &nbsp;</a>
-                           <a th:href="@{/tasks/status/todo}" th:id="todo" class="btn btn-sm btn-outline-secondary bi-calendar">&nbsp; Новые &nbsp;</a>
-                        </span>
-                        <span th:if="${status.toString().equals('TODO')}">
-                           <a th:href="@{/tasks/status/done}" th:value="done" th:id="done"
-                              class="btn btn-sm btn-outline-secondary bi-calendar-check">&nbsp; Выполненные &nbsp;</a>
-                           <a th:href="@{/tasks/status/todo}" th:id="todo" class="btn btn-sm btn-success bi-calendar">&nbsp; Новые &nbsp;</a>
-                        </span>
-                    </div>
-                </label>
+                    <a th:if="${status.equals('DONE')}" th:href="@{/tasks/status/done}" th:value="done" th:id="done" class="btn btn-sm btn-success bi-calendar-check">&nbsp; Выполненные &nbsp;</a>
+                    <a th:if="${status.equals('DONE')}" th:href="@{/tasks/status/todo}" th:id="todo" class="btn btn-sm btn-outline-secondary bi-calendar">&nbsp; Новые &nbsp;</a>
+
+                    <a th:if="${status.toString().equals('TODO')}" th:href="@{/tasks/status/done}" th:value="done" th:id="done" class="btn btn-sm btn-outline-secondary bi-calendar-check">&nbsp;
+                        Выполненные &nbsp;</a>
+                    <a th:if="${status.toString().equals('TODO')}" th:href="@{/tasks/status/todo}" th:id="todo" class="btn btn-sm btn-success bi-calendar">&nbsp; Новые &nbsp;</a>
+                </div>
             </div>
         </div>
         <div class="row">
