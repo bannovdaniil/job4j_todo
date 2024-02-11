@@ -5,6 +5,6 @@ CREATE TABLE tasks
     id          SERIAL PRIMARY KEY,
     description VARCHAR,
     created     TIMESTAMP,
-    done        BOOLEAN DEFAULT FALSE
+    done        BOOLEAN DEFAULT FALSE NOT NULL
 );
 -- rollback DROP TABLE tasks;
