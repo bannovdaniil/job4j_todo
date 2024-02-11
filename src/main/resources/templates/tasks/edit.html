@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head th:replace="~{blocks/base_head :: baseHead(~{::title})}">
-    <title>Создание задачи</title>
+    <title>Изменение задачи</title>
 </head>
 <body>
 <div class="container-fluid p-0">
@@ -10,14 +10,26 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <form class="mt-3" th:action="@{/tasks/add}" method="post" th:object="${task}">
+                <form class="mt-3" th:action="@{/tasks/edit}" method="post" th:object="${task}">
+                    <input type="hidden" name="id" th:value="${task.id}">
                     <div class="mb-3" th:if="${error}">
                         <p class="text-danger" th:text="${error}"></p>
                     </div>
                     <div class="mb-3">
+                        <label class="font-weight-bold d-inline-block">Состояние:&nbsp; </label>
+                        <select class="form-control custom-select" id="status" name="done">
+                            <option value="true" th:selected="${task.done}">Выполнено</option>
+                            <option value="false" th:selected="${!task.done}">Не выполнено</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <div th:inline="text">Создана: [[*{{created}}]]</div>
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label"><b>Описание задачи:</b></label>
-                        <input type="text" class="form-control" id="description" name="description"
-                               placeholder="Сходить за хлебом..." required>
+                        <textarea class="form-control" id="description" name="description" rows="5"
+                                  placeholder="Сходить за хлебом..." required th:field="*{description}">
+                        </textarea>
                     </div>
                     <div class="col-12">
                         <div class="row justify-content-center">

@@ -52,7 +52,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="task, item: ${tasks}">
+                    <tr th:each="task, item: ${tasks}"
+                        class="clickable-row" style='cursor: pointer; cursor: hand;'
+                        th:onclick="'window.location=\'' + @{/tasks/{taskId}(taskId=*{task.id})} +'\''">
+
                         <th th:text="${item.index + 1}"/>
                         <td class="justify-content-center">
                            <span th:if="${task.done}">

@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
+import ru.job4j.dto.TaskUpdateDto;
 import ru.job4j.exception.NotFoundException;
 import ru.job4j.model.TaskStatus;
 import ru.job4j.service.TaskService;
@@ -67,7 +68,7 @@ public class TaskController {
         } catch (Exception e) {
             return sendNotFoundError(model, "Не смог удалить задачу.");
         }
-        return "tasks/list";
+        return "redirect:/";
     }
 
     /**
@@ -77,6 +78,7 @@ public class TaskController {
     public String showEditTaskPage(@PathVariable int taskId, Model model) {
         try {
             TaskOutDto task = taskService.findById(taskId);
+            model.addAttribute("task", task);
         } catch (Exception e) {
             return sendNotFoundError(model, "Не смог найти задачу.");
         }
@@ -86,10 +88,11 @@ public class TaskController {
     /**
      * Редактирование задачи
      */
-    @PostMapping("/tasks/edit/{taskId}")
-    public String editTask(@PathVariable int taskId, Model model) {
+    @PostMapping("/tasks/edit")
+    public String editTask(@ModelAttribute TaskUpdateDto dto, Model model) {
         try {
-            TaskOutDto task = taskService.findById(taskId);
+            TaskOutDto task = taskService.update(dto);
+            model.addAttribute("task", task);
         } catch (Exception e) {
             return sendNotFoundError(model, "Не смог найти задачу.");
         }
