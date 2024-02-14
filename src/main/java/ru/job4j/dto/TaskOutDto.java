@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class TaskOutDto {
-    private Integer id;
+    private int id;
+    private String title;
     private String description;
     private LocalDateTime created;
-    private Boolean done;
+    private boolean done;
 }

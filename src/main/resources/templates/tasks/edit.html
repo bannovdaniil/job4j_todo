@@ -27,9 +27,13 @@
                         <div th:inline="text">Создана: [[*{{created}}]]</div>
                     </div>
                     <div class="mb-3">
+                        <label for="title">Название</label>
+                        <input class="form-control"  name="title" id="title" type="text" th:value="*{title}" size="128"  required>
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label"><b>Описание задачи:</b></label>
                         <textarea class="form-control" id="description" name="description" rows="5"
-                                  placeholder="Сходить за хлебом..." required th:field="*{description}">
+                                  placeholder="Сходить за хлебом в соседний магазин..." required th:field="*{description}">
                         </textarea>
                     </div>
                     <div class="col-12">

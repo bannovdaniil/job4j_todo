@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
-import ru.job4j.exception.NotFoundException;
-import ru.job4j.model.TaskStatus;
 import ru.job4j.service.TaskService;
 
 @Controller
@@ -16,11 +14,6 @@ import ru.job4j.service.TaskService;
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
-
-    private static String sendNotFoundError(Model model, String message) {
-        model.addAttribute("message", message);
-        return "errors/404";
-    }
 
     /**
      * Стартовая страница - список задач
@@ -35,10 +28,9 @@ public class TaskController {
      * Стартовая страница - список задач
      */
     @GetMapping("/tasks/status/{status}")
-    public String getListForStatus(@PathVariable String status, Model model) {
-        TaskStatus taskStatus = TaskStatus.valueOf(status.toUpperCase());
-        model.addAttribute("tasks", taskService.findAllByStatus(taskStatus.isStatus()));
-        model.addAttribute("status", taskStatus.name());
+    public String getListForStatus(@PathVariable Boolean status, Model model) {
+        model.addAttribute("tasks", taskService.findAllByStatus(status));
+        model.addAttribute("status", status);
         return "tasks/list";
     }
 
@@ -47,14 +39,22 @@ public class TaskController {
      * done -> to_do
      * to_do -> done
      */
-    @GetMapping("/tasks/switch/{taskId}")
-    public String switchStatus(@PathVariable int taskId, Model model) {
-        try {
-            TaskOutDto dto = taskService.switchStatus(taskId);
-            model.addAttribute("task", dto);
-        } catch (Exception e) {
-            return sendNotFoundError(model, "Не смог поменять состояние.");
-        }
+    @GetMapping("/tasks/switch/{taskId}/done")
+    public String switchStatusToDone(@PathVariable int taskId, Model model) {
+        TaskOutDto dto = taskService.updateStatus(taskId, true);
+        model.addAttribute("task", dto);
+        return "tasks/one";
+    }
+
+    /**
+     * Перевести задачу в противоположное состояние
+     * done -> to_do
+     * to_do -> done
+     */
+    @GetMapping("/tasks/switch/{taskId}/todo")
+    public String switchStatusToTodo(@PathVariable int taskId, Model model) {
+        TaskOutDto dto = taskService.updateStatus(taskId, false);
+        model.addAttribute("task", dto);
         return "tasks/one";
     }
 
@@ -62,12 +62,8 @@ public class TaskController {
      * Удалить задачу
      */
     @GetMapping("/tasks/delete/{taskId}")
-    public String deleteTask(@PathVariable int taskId, Model model) {
-        try {
-            taskService.delete(taskId);
-        } catch (Exception e) {
-            return sendNotFoundError(model, "Не смог удалить задачу.");
-        }
+    public String deleteTask(@PathVariable int taskId) {
+        taskService.delete(taskId);
         return "redirect:/";
     }
 
@@ -76,12 +72,8 @@ public class TaskController {
      */
     @GetMapping("/tasks/edit/{taskId}")
     public String showEditTaskPage(@PathVariable int taskId, Model model) {
-        try {
-            TaskOutDto task = taskService.findById(taskId);
-            model.addAttribute("task", task);
-        } catch (Exception e) {
-            return sendNotFoundError(model, "Не смог найти задачу.");
-        }
+        TaskOutDto task = taskService.findById(taskId);
+        model.addAttribute("task", task);
         return "tasks/edit";
     }
 
@@ -90,12 +82,8 @@ public class TaskController {
      */
     @PostMapping("/tasks/edit")
     public String editTask(@ModelAttribute TaskUpdateDto dto, Model model) {
-        try {
-            TaskOutDto task = taskService.update(dto);
-            model.addAttribute("task", task);
-        } catch (Exception e) {
-            return sendNotFoundError(model, "Не смог найти задачу.");
-        }
+        TaskOutDto task = taskService.update(dto);
+        model.addAttribute("task", task);
         return "tasks/one";
     }
 
@@ -113,12 +101,8 @@ public class TaskController {
     @GetMapping("/tasks/{taskId}")
     public String addTask(@PathVariable Integer taskId, Model model) {
         TaskOutDto task;
-        try {
-            task = taskService.findById(taskId);
-            model.addAttribute("task", task);
-        } catch (NotFoundException e) {
-            return sendNotFoundError(model, "Задача не не найдена.");
-        }
+        task = taskService.findById(taskId);
+        model.addAttribute("task", task);
         return "tasks/one";
     }
 
@@ -139,5 +123,4 @@ public class TaskController {
 
         return "tasks/one";
     }
-
 }

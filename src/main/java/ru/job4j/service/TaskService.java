@@ -20,5 +20,5 @@ public interface TaskService {
 
     List<TaskOutDto> findAllByStatus(Boolean status);
 
-    TaskOutDto switchStatus(int taskId) throws NotFoundException;
+    TaskOutDto updateStatus(int taskId, boolean status);
 }

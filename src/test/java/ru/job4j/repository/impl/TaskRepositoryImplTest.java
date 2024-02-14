@@ -50,6 +50,7 @@ class TaskRepositoryImplTest {
             Liquibase liquibase = new Liquibase(defaultLiquibaseChangelog, new ClassLoaderResourceAccessor(), database);
             liquibase.dropAll();
             liquibase.update();
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,7 +67,7 @@ class TaskRepositoryImplTest {
     @DisplayName("Save + findById")
     @Test
     void save() {
-        Task task = new Task(null, "test task", LocalDateTime.now(), false);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false);
         task = taskRepository.save(task);
         Task resultTask = taskRepository.findById(task.getId()).orElseThrow();
 
@@ -80,7 +81,7 @@ class TaskRepositoryImplTest {
         LocalDateTime expectedTime = LocalDateTime.now().withNano(0);
         boolean expectedStatus = true;
 
-        Task task = new Task(null, "test task", expectedTime, false);
+        Task task = new Task(0, "task name", "test task", expectedTime, false);
         task = taskRepository.save(task);
         task = taskRepository.findById(task.getId()).orElseThrow();
 
@@ -92,13 +93,13 @@ class TaskRepositoryImplTest {
         task = taskRepository.findById(task.getId()).orElseThrow();
 
         Assertions.assertEquals(expectedDescription, task.getDescription());
-        Assertions.assertEquals(expectedStatus, task.getDone());
+        Assertions.assertEquals(expectedStatus, task.isDone());
         Assertions.assertEquals(expectedTime, task.getCreated());
     }
 
     @Test
     void delete() {
-        Task task = new Task(null, "test task", LocalDateTime.now(), false);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false);
 
         task = taskRepository.save(task);
         Assertions.assertTrue(taskRepository.findById(task.getId()).isPresent());
@@ -110,7 +111,7 @@ class TaskRepositoryImplTest {
     @Test
     void findAll() {
         int beforeSize = taskRepository.findAll().size();
-        Task task = new Task(null, "test task", LocalDateTime.now(), false);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false);
         task = taskRepository.save(task);
 
         int afterSize = taskRepository.findAll().size();
@@ -126,7 +127,7 @@ class TaskRepositoryImplTest {
     })
     void findAllByStatus(Boolean status) {
         int beforeSize = taskRepository.findAllByStatus(status).size();
-        Task task = new Task(null, "test task", LocalDateTime.now(), status);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), status);
         task = taskRepository.save(task);
 
         int afterSize = taskRepository.findAllByStatus(status).size();

@@ -19,4 +19,5 @@ public interface TaskRepository {
 
     List<Task> findAllByStatus(Boolean status);
 
+    Optional<Task> updateStatusById(int taskId, boolean status);
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 /**
  * Сущность заданий.
  * id - номер задания
+ * title - название задачи
  * description - описание
  * created - время создания
  * done - выполнено
@@ -17,5 +18,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TaskInDto {
+    private String title;
     private String description;
 }

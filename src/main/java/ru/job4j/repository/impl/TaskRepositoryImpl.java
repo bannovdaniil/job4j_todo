@@ -20,33 +20,43 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public Task save(Task task) {
-        try (Session session = sessionFactory.openSession()) {
+        Session session = sessionFactory.openSession();
+        try {
             Transaction transaction = session.beginTransaction();
             session.persist(task);
             transaction.commit();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             throw new RepositoryException("Error (save): " + e.getMessage());
+        } finally {
+            session.close();
         }
         return task;
     }
 
     @Override
     public Task update(Task task) {
-        try (Session session = sessionFactory.openSession()) {
+        Session session = sessionFactory.openSession();
+        try {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery("""
                             UPDATE Task t
-                            SET t.description = :description,
+                            SET t.title = :title,
+                                t.description = :description,
                                 t.done = :done
                             WHERE t.id = :taskId
                             """)
+                    .setParameter("title", task.getTitle())
                     .setParameter("description", task.getDescription())
-                    .setParameter("done", task.getDone())
+                    .setParameter("done", task.isDone())
                     .setParameter("taskId", task.getId());
             query.executeUpdate();
             transaction.commit();
         } catch (Exception e) {
+            session.getTransaction().rollback();
             throw new RepositoryException("Error (update): " + e.getMessage());
+        } finally {
+            session.close();
         }
 
         return task;
@@ -55,7 +65,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public boolean delete(int taskId) {
         boolean result;
-        try (Session session = sessionFactory.openSession()) {
+        Session session = sessionFactory.openSession();
+        try {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery("DELETE Task t WHERE t.id = :taskId")
                     .setParameter("taskId", taskId);
@@ -63,7 +74,10 @@ public class TaskRepositoryImpl implements TaskRepository {
             transaction.commit();
             result = true;
         } catch (Exception e) {
+            session.getTransaction().rollback();
             throw new RepositoryException("Error (delete): " + e.getMessage());
+        } finally {
+            session.close();
         }
         return result;
     }
@@ -110,5 +124,32 @@ public class TaskRepositoryImpl implements TaskRepository {
             throw new RepositoryException("Error (findAllByStatus): " + e.getMessage());
         }
         return taskList;
+    }
+
+    @Override
+    public Optional<Task> updateStatusById(int taskId, boolean status) {
+        Optional<Task> task = Optional.empty();
+        Session session = sessionFactory.openSession();
+        try {
+            Transaction transaction = session.beginTransaction();
+            Query query = session.createQuery("""
+                            UPDATE Task t
+                            SET t.done = :done
+                            WHERE t.id = :taskId
+                            """)
+                    .setParameter("done", status)
+                    .setParameter("taskId", taskId);
+            query.executeUpdate();
+            Query<Task> getQuery = session.createQuery("FROM Task t WHERE t.id = :taskId", Task.class)
+                    .setParameter("taskId", taskId);
+            task = getQuery.uniqueResultOptional();
+            transaction.commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            throw new RepositoryException("Error (update): " + e.getMessage());
+        } finally {
+            session.close();
+        }
+        return task;
     }
 }

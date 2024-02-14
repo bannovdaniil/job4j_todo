@@ -18,6 +18,7 @@ import lombok.Setter;
 @Setter
 public class TaskUpdateDto {
     private Integer id;
+    private String title;
     private String description;
     private Boolean done;
 }

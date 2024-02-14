@@ -15,9 +15,13 @@
                         <p class="text-danger" th:text="${error}"></p>
                     </div>
                     <div class="mb-3">
+                        <label for="title">Название</label>
+                        <input class="form-control"  name="title" id="title" type="text" size="128" placeholder="Сходить за хлебом" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="description" class="form-label"><b>Описание задачи:</b></label>
                         <textarea class="form-control" id="description" name="description" rows="5"
-                                  placeholder="Сходить за хлебом..." required></textarea>
+                                  placeholder="Сходить за хлебом в соседний магазин..." required></textarea>
                     </div>
                     <div class="col-12">
                         <div class="row justify-content-center">

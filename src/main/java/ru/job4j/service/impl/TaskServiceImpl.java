@@ -60,13 +60,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskOutDto switchStatus(int taskId) throws NotFoundException {
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(
-                        () -> new NotFoundException("Task don't exist.")
-                );
-        task.setDone(!task.getDone());
-
-        return taskMapper.map(taskRepository.update(task));
+    public TaskOutDto updateStatus(int taskId, boolean status) {
+        Task task = taskRepository.updateStatusById(taskId, status).orElseThrow(
+                () -> new NotFoundException("Task not found.")
+        );
+        return taskMapper.map(task);
     }
 }

@@ -24,6 +24,10 @@
                             <span class="font-weight-bold">Время создания:&nbsp;</span>
                             <span th:text="*{created}"></span>
                         </div>
+                        <div class="row">
+                            <span class="font-weight-bold">Название:&nbsp;</span>
+                            <span th:text="*{title}"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,8 +46,8 @@
                     <a th:href="@{/tasks/delete/{id}(id=${task.id})}" class="mb-3 btn btn-outline-secondary">Удалить</a>
                     <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="mb-3 btn btn-outline-primary mx-1">Редактировать</a>
 
-                    <a th:if="${task.done}" th:href="@{/tasks/switch/{id}(id=${task.id})}" class="mb-3 btn btn-secondary">Не выполнено</a>
-                    <a th:unless="${task.done}" th:href="@{/tasks/switch/{id}(id=${task.id})}" class="mb-3 btn btn-success">Выполнено</a>
+                    <a th:if="${task.done}" th:href="@{/tasks/switch/{id}/todo(id=${task.id})}" class="mb-3 btn btn-secondary">Не выполнено</a>
+                    <a th:unless="${task.done}" th:href="@{/tasks/switch/{id}/done(id=${task.id})}" class="mb-3 btn btn-success">Выполнено</a>
                 </div>
             </div>
         </div>

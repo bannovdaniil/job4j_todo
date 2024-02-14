@@ -38,12 +38,13 @@
                         <th scope="col" class="col-auto">#</th>
                         <th scope="col" class="col-auto">Статус</th>
                         <th scope="col" class="col-auto">Время создания</th>
-                        <th scope="col" class="col-9">Описание</th>
+                        <th scope="col" class="col-auto">Название</th>
+                        <th scope="col" class="col-7">Описание</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="task, item: ${tasks}"
-                        class="clickable-row" style='cursor: hand;'
+                        class="clickable-row" style='cursor: pointer; cursor: hand;'
                         th:onclick="|location.href='@{/tasks/{taskId}(taskId=*{task.id})}'|">
 
                         <th th:text="${item.index + 1}"/>
@@ -56,6 +57,7 @@
                            </span>
                         </td>
                         <td th:text="${{task.created}}"/>
+                        <td th:text="${{task.title}}"/>
                         <td th:if="${task.description.length() < 100}">
                             <a th:href="@{/tasks/{taskId}(taskId=${task.id})}" th:text="${task.description}"> </a>
                         </td>

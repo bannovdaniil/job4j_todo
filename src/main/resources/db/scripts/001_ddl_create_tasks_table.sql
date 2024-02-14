@@ -3,8 +3,9 @@
 CREATE TABLE tasks
 (
     id          SERIAL PRIMARY KEY,
+    title       VARCHAR(128) UNIQUE       NOT NULL,
     description VARCHAR,
     created     TIMESTAMP,
-    done        BOOLEAN DEFAULT FALSE NOT NULL
+    done        VARCHAR(20) DEFAULT 'NEW' NOT NULL
 );
 -- rollback DROP TABLE tasks;
