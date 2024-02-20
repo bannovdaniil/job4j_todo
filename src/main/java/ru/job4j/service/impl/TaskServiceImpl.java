@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
-import ru.job4j.exception.NotFoundException;
 import ru.job4j.mapper.TaskMapper;
 import ru.job4j.model.Task;
 import ru.job4j.repository.TaskRepository;
@@ -13,6 +12,7 @@ import ru.job4j.service.TaskService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +46,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskOutDto findById(int taskId) throws NotFoundException {
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(
-                        () -> new NotFoundException("Task don't exist.")
-                );
-        return taskMapper.map(task);
+    public Optional<TaskOutDto> findById(int taskId) {
+        Optional<Task> task = taskRepository.findById(taskId);
+        return task.map(taskMapper::map);
     }
 
     @Override
@@ -60,10 +57,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskOutDto updateStatus(int taskId, boolean status) {
-        Task task = taskRepository.updateStatusById(taskId, status).orElseThrow(
-                () -> new NotFoundException("Task not found.")
-        );
-        return taskMapper.map(task);
+    public Optional<TaskOutDto> updateStatus(int taskId, boolean status) {
+        Optional<TaskOutDto> task = Optional.empty();
+        if (taskRepository.updateStatusById(taskId, status)) {
+            task = Optional.of(
+                    taskMapper.map(taskRepository.findById(taskId).orElse(null))
+            );
+        }
+        return task;
     }
 }

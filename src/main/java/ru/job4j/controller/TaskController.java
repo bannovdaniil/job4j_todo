@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
+import ru.job4j.mapper.TaskMapper;
 import ru.job4j.service.TaskService;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -41,8 +44,12 @@ public class TaskController {
      */
     @GetMapping("/tasks/switch/{taskId}/done")
     public String switchStatusToDone(@PathVariable int taskId, Model model) {
-        TaskOutDto dto = taskService.updateStatus(taskId, true);
-        model.addAttribute("task", dto);
+        Optional<TaskOutDto> dto = taskService.updateStatus(taskId, true);
+        if (dto.isEmpty()) {
+            model.addAttribute("message", "Ошибка обновления статуса");
+            return "errors/error";
+        }
+        model.addAttribute("task", dto.get());
         return "tasks/one";
     }
 
@@ -53,8 +60,12 @@ public class TaskController {
      */
     @GetMapping("/tasks/switch/{taskId}/todo")
     public String switchStatusToTodo(@PathVariable int taskId, Model model) {
-        TaskOutDto dto = taskService.updateStatus(taskId, false);
-        model.addAttribute("task", dto);
+        Optional<TaskOutDto> dto = taskService.updateStatus(taskId, false);
+        if (dto.isEmpty()) {
+            model.addAttribute("message", "Ошибка обновления статуса");
+            return "errors/error";
+        }
+        model.addAttribute("task", dto.get());
         return "tasks/one";
     }
 
@@ -62,8 +73,11 @@ public class TaskController {
      * Удалить задачу
      */
     @GetMapping("/tasks/delete/{taskId}")
-    public String deleteTask(@PathVariable int taskId) {
-        taskService.delete(taskId);
+    public String deleteTask(@PathVariable int taskId, Model model) {
+        if (!taskService.delete(taskId)) {
+            model.addAttribute("message", "Не смог удалить.");
+            return "errors/error";
+        }
         return "redirect:/";
     }
 
@@ -72,8 +86,12 @@ public class TaskController {
      */
     @GetMapping("/tasks/edit/{taskId}")
     public String showEditTaskPage(@PathVariable int taskId, Model model) {
-        TaskOutDto task = taskService.findById(taskId);
-        model.addAttribute("task", task);
+        Optional<TaskOutDto> dto = taskService.findById(taskId);
+        if (dto.isEmpty()) {
+            model.addAttribute("message", "Задача не найдена.");
+            return "errors/error";
+        }
+        model.addAttribute("task", dto.get());
         return "tasks/edit";
     }
 
@@ -99,10 +117,13 @@ public class TaskController {
      * Показать задачу по ID.
      */
     @GetMapping("/tasks/{taskId}")
-    public String addTask(@PathVariable Integer taskId, Model model) {
-        TaskOutDto task;
-        task = taskService.findById(taskId);
-        model.addAttribute("task", task);
+    public String getTaskByIdTask(@PathVariable Integer taskId, Model model) {
+        Optional<TaskOutDto> dto = taskService.findById(taskId);
+        if (dto.isEmpty()) {
+            model.addAttribute("message", "Задача не найдена.");
+            return "errors/error";
+        }
+        model.addAttribute("task", dto.get());
         return "tasks/one";
     }
 

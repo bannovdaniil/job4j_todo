@@ -64,22 +64,21 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public boolean delete(int taskId) {
-        boolean result;
+        int result;
         Session session = sessionFactory.openSession();
         try {
             Transaction transaction = session.beginTransaction();
             Query query = session.createQuery("DELETE Task t WHERE t.id = :taskId")
                     .setParameter("taskId", taskId);
-            query.executeUpdate();
+            result = query.executeUpdate();
             transaction.commit();
-            result = true;
         } catch (Exception e) {
             session.getTransaction().rollback();
             throw new RepositoryException("Error (delete): " + e.getMessage());
         } finally {
             session.close();
         }
-        return result;
+        return result != 0;
     }
 
     @Override
@@ -127,8 +126,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Optional<Task> updateStatusById(int taskId, boolean status) {
-        Optional<Task> task = Optional.empty();
+    public boolean updateStatusById(int taskId, boolean status) {
+        int result = 0;
         Session session = sessionFactory.openSession();
         try {
             Transaction transaction = session.beginTransaction();
@@ -139,10 +138,7 @@ public class TaskRepositoryImpl implements TaskRepository {
                             """)
                     .setParameter("done", status)
                     .setParameter("taskId", taskId);
-            query.executeUpdate();
-            Query<Task> getQuery = session.createQuery("FROM Task t WHERE t.id = :taskId", Task.class)
-                    .setParameter("taskId", taskId);
-            task = getQuery.uniqueResultOptional();
+            result = query.executeUpdate();
             transaction.commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -150,6 +146,6 @@ public class TaskRepositoryImpl implements TaskRepository {
         } finally {
             session.close();
         }
-        return task;
+        return result != 0;
     }
 }
