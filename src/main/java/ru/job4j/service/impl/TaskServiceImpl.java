@@ -57,13 +57,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Optional<TaskOutDto> updateStatus(int taskId, boolean status) {
-        Optional<TaskOutDto> task = Optional.empty();
-        if (taskRepository.updateStatusById(taskId, status)) {
-            task = Optional.of(
-                    taskMapper.map(taskRepository.findById(taskId).orElse(null))
-            );
-        }
-        return task;
+    public boolean updateStatus(int taskId, boolean status) {
+        return taskRepository.updateStatusById(taskId, status);
     }
 }

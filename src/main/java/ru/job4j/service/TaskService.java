@@ -20,5 +20,5 @@ public interface TaskService {
 
     List<TaskOutDto> findAllByStatus(Boolean status);
 
-    Optional<TaskOutDto> updateStatus(int taskId, boolean status);
+    boolean updateStatus(int taskId, boolean status);
 }

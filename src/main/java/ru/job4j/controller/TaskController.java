@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
-import ru.job4j.mapper.TaskMapper;
 import ru.job4j.service.TaskService;
 
 import java.util.Optional;
@@ -44,13 +43,11 @@ public class TaskController {
      */
     @GetMapping("/tasks/switch/{taskId}/done")
     public String switchStatusToDone(@PathVariable int taskId, Model model) {
-        Optional<TaskOutDto> dto = taskService.updateStatus(taskId, true);
-        if (dto.isEmpty()) {
+        if (!taskService.updateStatus(taskId, true)) {
             model.addAttribute("message", "Ошибка обновления статуса");
             return "errors/error";
         }
-        model.addAttribute("task", dto.get());
-        return "tasks/one";
+        return "redirect:/tasks/" + taskId;
     }
 
     /**
@@ -60,13 +57,11 @@ public class TaskController {
      */
     @GetMapping("/tasks/switch/{taskId}/todo")
     public String switchStatusToTodo(@PathVariable int taskId, Model model) {
-        Optional<TaskOutDto> dto = taskService.updateStatus(taskId, false);
-        if (dto.isEmpty()) {
+        if (!taskService.updateStatus(taskId, false)) {
             model.addAttribute("message", "Ошибка обновления статуса");
             return "errors/error";
         }
-        model.addAttribute("task", dto.get());
-        return "tasks/one";
+        return "redirect:/tasks/" + taskId;
     }
 
     /**
