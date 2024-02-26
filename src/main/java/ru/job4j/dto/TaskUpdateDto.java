@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Сущность заданий.
+ * Сущность заданий при изменении.
  * id - номер задания
  * description - описание
  * created - время создания

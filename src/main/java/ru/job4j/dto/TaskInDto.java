@@ -6,12 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Сущность заданий.
- * id - номер задания
+ * Сущность заданий для формы создания.
  * title - название задачи
  * description - описание
- * created - время создания
- * done - выполнено
  */
 @NoArgsConstructor
 @AllArgsConstructor

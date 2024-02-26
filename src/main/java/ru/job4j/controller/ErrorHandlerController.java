@@ -19,7 +19,7 @@ public class ErrorHandlerController {
             IllegalArgumentException.class
     })
     public ModelAndView handleBadRequest(final Exception e, HttpServletRequest httpRequest) {
-        logger.error("url:{}, error:{}", httpRequest.getRequestURL(), e.getMessage());
+        logger.error("url:{}, error:{}", httpRequest.getRequestURL(), e);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("errors/error");
         modelAndView.addObject("message", "Ошибка валидации данных.");
@@ -29,7 +29,7 @@ public class ErrorHandlerController {
 
     @ExceptionHandler({NotFoundException.class})
     public ModelAndView handleNotFound(final Exception e, HttpServletRequest httpRequest) {
-        logger.error("url:{}, error:{}", httpRequest.getRequestURL(), e.getMessage());
+        logger.error("url:{}, error:{}", httpRequest.getRequestURL(), e);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("errors/error");
         modelAndView.addObject("message", "Сущность не найдена.");
@@ -39,7 +39,7 @@ public class ErrorHandlerController {
 
     @ExceptionHandler({Exception.class})
     public ModelAndView handleAllError(final Throwable e, HttpServletRequest httpRequest) {
-        logger.error("url:{}, error:{}", httpRequest.getRequestURL(), e.getMessage());
+        logger.error("url:{}, error:{}", httpRequest.getRequestURL(), e);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("errors/error");
         modelAndView.addObject("message", "Непредвиденная ошибка, сообщите администратору.");

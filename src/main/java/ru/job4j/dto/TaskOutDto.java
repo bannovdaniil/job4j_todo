@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * Сущность заданий.
+ * Сущность заданий при отображении информации.
  * id - номер задания
  * description - описание
  * created - время создания
