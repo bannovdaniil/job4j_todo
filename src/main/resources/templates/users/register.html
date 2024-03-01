@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head th:replace="~{blocks/base_head :: baseHead(~{::title})}">
-    <title>Создание резюме</title>
+    <title>Регистрация</title>
 </head>
 <body>
 <div class="container-fluid p-0">
@@ -19,9 +19,8 @@
                         <input type="text" class="form-control" id="name" name="name" placeholder="Иван" required>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label"><b>Почта</b></label>
-                        <input type="text" class="form-control" id="email" name="email" placeholder="ivan@mail.ru"
-                               required>
+                        <label for="login" class="form-label"><b>Почта</b></label>
+                        <input type="text" class="form-control" id="login" name="login" placeholder="ivan@mail.ru" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label"><b>Пароль</b></label>
@@ -29,7 +28,7 @@
                     </div>
                     <div class="col-12">
                         <div class="row justify-content-end">
-                            <div class="col-3"><a class="btn btn-danger w-100" th:href="@{/}">Отмена</a></div>
+                            <div class="col-3"><a class="btn btn-danger w-100" th:href="@{/static}">Отмена</a></div>
                             <div class="col-3">
                                 <button class="btn btn-primary w-100" type="submit">Сохранить</button>
                             </div>

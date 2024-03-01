@@ -31,9 +31,16 @@ https://github.com/bannovdaniil
 https://www.linkedin.com/in/bannovdaniil
 https://t.me/BannovDaniil
 
-
 **Виды.**
 - http://localhost:8080/
+
+**Для работы со писком задач, потребуется авторизация.**
+- страница авторизации http://localhost:8080/users/login
+![image](https://github.com/bannovdaniil/job4j_todo/assets/96119195/d4353dc8-fd36-4c39-a80e-9e1b51b8ab33)
+
+- страница регистрации http://localhost:8080/users/register
+![image](https://github.com/bannovdaniil/job4j_todo/assets/96119195/7dc24b2a-effc-4a54-8a57-b19202e9e61c)
+
 - Страница со списком всех заданий. В таблице отображаем имя, дату создания и состояние (выполнено или нет)
 - На странице со списком три ссылки: "Все", "Выполненные", "Новые". При переходе по ссылкам в таблице нужно отображать: все задания, только выполненные или только новые.
 ![image](https://github.com/bannovdaniil/job4j_todo/assets/96119195/e8f659a3-7389-4f6f-a687-6778243de6ee)

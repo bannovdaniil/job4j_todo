@@ -15,8 +15,8 @@
                         <p class="text-danger" th:text="${error}"></p>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label"><b>Почта</b></label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="ivan@mail.ru"
+                        <label for="login" class="form-label"><b>Почта</b></label>
+                        <input type="login" class="form-control" id="login" name="login" placeholder="ivan@mail.ru"
                                required>
                     </div>
                     <div class="mb-3">
@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-5">
                             <div class="row">
-                                <div class="col-6"><a class="btn btn-danger w-100" th:href="@{/}">Отмена</a></div>
+                                <div class="col-6"><a class="btn btn-danger w-100" th:href="@{/static}">Отмена</a></div>
                                 <div class="col-6">
                                     <button class="btn btn-primary w-100" type="submit">Войти</button>
                                 </div>

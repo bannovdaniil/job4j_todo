@@ -30,8 +30,8 @@ public class TaskController {
      * Стартовая страница - список задач
      */
     @GetMapping("/tasks/status/{status}")
-    public String getListForStatus(@PathVariable Boolean status, Model model) {
-        model.addAttribute("tasks", taskService.findAllByStatus(status));
+    public String getListForStatus(@PathVariable String status, Model model) {
+        model.addAttribute("tasks", taskService.findAllByStatus(status.equals("done")));
         model.addAttribute("status", status);
         return "tasks/list";
     }

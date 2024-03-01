@@ -75,6 +75,6 @@ public class UserController {
             return "users/register";
         }
 
-        return "users/login";
+        return "redirect:/users/login";
     }
 }
