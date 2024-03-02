@@ -32,7 +32,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskOutDto update(TaskUpdateDto dto) {
         Task task = taskMapper.map(dto);
-        return taskMapper.map(taskRepository.update(task));
+        taskRepository.update(task);
+        return taskMapper.map(taskRepository.findById(task.getId()).get());
     }
 
     @Override

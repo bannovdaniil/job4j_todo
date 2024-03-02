@@ -9,7 +9,7 @@ public interface TaskRepository {
 
     Task save(Task task);
 
-    Task update(Task task);
+    void update(Task task);
 
     boolean delete(int taskId);
 

@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository {
     User save(User user) throws UniqueConstraintException;
+
     Optional<User> findByLoginAndPassword(String login, String password);
 }

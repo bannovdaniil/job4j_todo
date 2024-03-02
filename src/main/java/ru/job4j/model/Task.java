@@ -27,6 +27,7 @@ public class Task {
     private int id;
     private String title;
     private String description;
+    @Column(updatable = false)
     private LocalDateTime created;
     private boolean done;
 }

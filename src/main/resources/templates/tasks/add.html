@@ -10,18 +10,18 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6">
-                <form class="mt-3" th:action="@{/tasks/add}" method="post" th:object="${task}">
+                <form class="mt-3" method="post" th:action="@{/tasks/add}" th:object="${task}">
                     <div class="mb-3" th:if="${error}">
                         <p class="text-danger" th:text="${error}"></p>
                     </div>
                     <div class="mb-3">
                         <label for="title">Название</label>
-                        <input class="form-control"  name="title" id="title" type="text" size="128" placeholder="Сходить за хлебом" required>
+                        <input class="form-control" id="title" name="title" placeholder="Сходить за хлебом" required size="128" type="text">
                     </div>
                     <div class="mb-3">
-                        <label for="description" class="form-label"><b>Описание задачи:</b></label>
-                        <textarea class="form-control" id="description" name="description" rows="5"
-                                  placeholder="Сходить за хлебом в соседний магазин..." required></textarea>
+                        <label class="form-label" for="description"><b>Описание задачи:</b></label>
+                        <textarea class="form-control" id="description" name="description" placeholder="Сходить за хлебом в соседний магазин..."
+                                  required rows="5"></textarea>
                     </div>
                     <div class="col-12">
                         <div class="row justify-content-center">

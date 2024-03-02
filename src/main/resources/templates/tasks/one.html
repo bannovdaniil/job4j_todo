@@ -22,7 +22,7 @@
                         </div>
                         <div class="row">
                             <span class="font-weight-bold">Время создания:&nbsp;</span>
-                            <span th:text="*{created}"></span>
+                            <span th:text="*{{created}}"></span>
                         </div>
                         <div class="row">
                             <span class="font-weight-bold">Название:&nbsp;</span>
@@ -38,16 +38,16 @@
             </div>
             <div class="row my-5">
                 <div class="col-auto text-center btn-group">
-                    <a th:href=" @{/}" class="mb-3 btn btn-outline-secondary mx-1"> К списку </a>
-                    <a th:href=" @{/tasks/add}" class="mb-3 btn btn-outline-primary"> Создать еще задачу </a>
+                    <a class="mb-3 btn btn-outline-secondary mx-1" th:href=" @{/}"> К списку </a>
+                    <a class="mb-3 btn btn-outline-primary" th:href=" @{/tasks/add}"> Создать еще задачу </a>
                 </div>
                 <div class="mx-3 col-1"></div>
                 <div class="col-auto align-items-end btn-group">
-                    <a th:href="@{/tasks/delete/{id}(id=${task.id})}" class="mb-3 btn btn-outline-secondary">Удалить</a>
-                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="mb-3 btn btn-outline-primary mx-1">Редактировать</a>
+                    <a class="mb-3 btn btn-outline-secondary" th:href="@{/tasks/delete/{id}(id=${task.id})}">Удалить</a>
+                    <a class="mb-3 btn btn-outline-primary mx-1" th:href="@{/tasks/edit/{id}(id=${task.id})}">Редактировать</a>
 
-                    <a th:if="${task.done}" th:href="@{/tasks/switch/{id}/todo(id=${task.id})}" class="mb-3 btn btn-secondary">Не выполнено</a>
-                    <a th:unless="${task.done}" th:href="@{/tasks/switch/{id}/done(id=${task.id})}" class="mb-3 btn btn-success">Выполнено</a>
+                    <a class="mb-3 btn btn-secondary" th:href="@{/tasks/switch/{id}/todo(id=${task.id})}" th:if="${task.done}">Не выполнено</a>
+                    <a class="mb-3 btn btn-success" th:href="@{/tasks/switch/{id}/done(id=${task.id})}" th:unless="${task.done}">Выполнено</a>
                 </div>
             </div>
         </div>

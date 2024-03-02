@@ -1,151 +1,82 @@
 package ru.job4j.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
-import ru.job4j.exception.RepositoryException;
 import ru.job4j.model.Task;
 import ru.job4j.repository.TaskRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepository {
-    private final SessionFactory sessionFactory;
+    private final CrudRepository crudRepository;
 
     @Override
     public Task save(Task task) {
-        Session session = sessionFactory.openSession();
-        try {
-            Transaction transaction = session.beginTransaction();
-            session.persist(task);
-            transaction.commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new RepositoryException("Error (save): " + e.getMessage());
-        } finally {
-            session.close();
-        }
+        crudRepository.run(session -> session.persist(task));
         return task;
     }
 
     @Override
-    public Task update(Task task) {
-        Session session = sessionFactory.openSession();
-        try {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("""
-                            UPDATE Task t
-                            SET t.title = :title,
-                                t.description = :description,
-                                t.done = :done
-                            WHERE t.id = :taskId
-                            """)
-                    .setParameter("title", task.getTitle())
-                    .setParameter("description", task.getDescription())
-                    .setParameter("done", task.isDone())
-                    .setParameter("taskId", task.getId());
-            query.executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new RepositoryException("Error (update): " + e.getMessage());
-        } finally {
-            session.close();
-        }
-
-        return task;
+    public void update(Task task) {
+        crudRepository.run(session -> session.merge(task));
     }
 
+    /**
+     * Удалить задачу по id
+     *
+     * @param taskId - id задачи
+     * @return
+     */
     @Override
     public boolean delete(int taskId) {
-        int result;
-        Session session = sessionFactory.openSession();
-        try {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("DELETE Task t WHERE t.id = :taskId")
-                    .setParameter("taskId", taskId);
-            result = query.executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new RepositoryException("Error (delete): " + e.getMessage());
-        } finally {
-            session.close();
-        }
-        return result != 0;
+        return 0 != crudRepository.runWithAction(
+                "DELETE FROM Task t WHERE t.id = :taskId",
+                Map.of("taskId", taskId)
+        );
     }
 
+    /**
+     * Получить список всех задач
+     *
+     * @return
+     */
     @Override
     public List<Task> findAll() {
-        List<Task> taskList = List.of();
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task t", Task.class);
-            taskList = query.list();
-            transaction.commit();
-        } catch (Exception e) {
-            throw new RepositoryException("Error (findAll): " + e.getMessage());
-        }
-        return taskList;
+        return crudRepository.query("FROM Task t", Task.class);
     }
 
+    /**
+     * Найти задачу по id
+     *
+     * @param taskId - id задачи
+     * @return
+     */
     @Override
     public Optional<Task> findById(int taskId) {
-        Optional<Task> task = Optional.empty();
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task t WHERE t.id = :taskId", Task.class)
-                    .setParameter("taskId", taskId);
-            task = query.uniqueResultOptional();
-            transaction.commit();
-        } catch (Exception e) {
-            throw new RepositoryException("Error (findById): " + e.getMessage());
-        }
-        return task;
+        return crudRepository.optional(
+                "FROM Task t WHERE t.id = :taskId", Task.class,
+                Map.of("taskId", taskId)
+        );
     }
 
     @Override
     public List<Task> findAllByStatus(Boolean status) {
-        List<Task> taskList = List.of();
-        try (Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
-            Query<Task> query = session.createQuery("FROM Task t WHERE t.done = :done", Task.class)
-                    .setParameter("done", status);
-            taskList = query.list();
-            transaction.commit();
-        } catch (Exception e) {
-            throw new RepositoryException("Error (findAllByStatus): " + e.getMessage());
-        }
-        return taskList;
+        return crudRepository.query("FROM Task t WHERE t.done = :done", Task.class,
+                Map.of("done", status));
     }
 
     @Override
     public boolean updateStatusById(int taskId, boolean status) {
-        int result = 0;
-        Session session = sessionFactory.openSession();
-        try {
-            Transaction transaction = session.beginTransaction();
-            Query query = session.createQuery("""
-                            UPDATE Task t
-                            SET t.done = :done
-                            WHERE t.id = :taskId
-                            """)
-                    .setParameter("done", status)
-                    .setParameter("taskId", taskId);
-            result = query.executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw new RepositoryException("Error (update): " + e.getMessage());
-        } finally {
-            session.close();
-        }
-        return result != 0;
+        return 0 != crudRepository.runWithAction("""
+                        UPDATE Task t
+                        SET t.done = :done
+                        WHERE t.id = :taskId
+                        """,
+                Map.of("done", status, "taskId", taskId)
+        );
     }
 }

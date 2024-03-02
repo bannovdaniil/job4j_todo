@@ -8,5 +8,6 @@ import ru.job4j.model.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     User map(UserCreateDto dto);
+
     UserOutDto map(User user);
 }

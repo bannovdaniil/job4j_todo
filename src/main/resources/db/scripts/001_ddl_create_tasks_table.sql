@@ -3,7 +3,7 @@
 CREATE TABLE tasks
 (
     id          SERIAL PRIMARY KEY,
-    title       VARCHAR(128) UNIQUE NOT NULL,
+    title       VARCHAR(128) UNIQUE   NOT NULL,
     description VARCHAR,
     created     TIMESTAMP,
     done        BOOLEAN DEFAULT FALSE NOT NULL

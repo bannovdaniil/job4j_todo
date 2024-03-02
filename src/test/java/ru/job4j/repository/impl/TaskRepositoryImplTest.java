@@ -38,8 +38,9 @@ class TaskRepositoryImplTest {
                 .build();
 
         SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+        CrudRepository crudRepository = new CrudRepository(sessionFactory);
         initLiquibase(sessionFactory, liquibaseSchema);
-        taskRepository = new TaskRepositoryImpl(sessionFactory);
+        taskRepository = new TaskRepositoryImpl(crudRepository);
     }
 
     public static void initLiquibase(SessionFactory sessionFactory, String defaultLiquibaseChangelog) {
