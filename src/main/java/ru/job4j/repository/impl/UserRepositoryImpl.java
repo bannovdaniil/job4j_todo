@@ -7,6 +7,7 @@ import ru.job4j.exception.UniqueConstraintException;
 import ru.job4j.model.User;
 import ru.job4j.repository.UserRepository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,4 +46,29 @@ public class UserRepositoryImpl implements UserRepository {
                 Map.of("login", login, "password", password)
         );
     }
+
+    /**
+     * Удалить пользователя по id
+     *
+     * @param userId - id пользователя.
+     * @return
+     */
+    @Override
+    public boolean delete(int userId) {
+        return 0 != crudRepository.runWithAction(
+                "DELETE FROM User u WHERE u.id = :userId",
+                Map.of("userId", userId)
+        );
+    }
+
+    /**
+     * Получить список всех пользователей
+     *
+     * @return
+     */
+    @Override
+    public List<User> findAll() {
+        return crudRepository.query("FROM User u", User.class);
+    }
+
 }

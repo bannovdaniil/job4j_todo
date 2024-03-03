@@ -37,8 +37,9 @@
                     <tr>
                         <th class="col-auto" scope="col">#</th>
                         <th class="col-auto" scope="col">Статус</th>
+                        <th class="col-auto" scope="col">Владелец</th>
                         <th class="col-auto" scope="col">Время создания</th>
-                        <th class="col-8" scope="col">Название</th>
+                        <th class="col-7" scope="col">Название</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,6 +55,7 @@
                                 <i class="bi bi-square"></i>
                            </span>
                         </td>
+                        <td th:text="${task.user.name}"/>
                         <td th:text="${{task.created}}"/>
                         <td>
                             <a th:href="@{/tasks/{taskId}(taskId=${task.id})}" th:text="${task.title}"> </a>

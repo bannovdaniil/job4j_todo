@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head th:replace="~{blocks/base_head :: baseHead(~{::title})}">
-    <title th:inline="text">Задача: [[${task.created}]]</title>
+    <title th:inline="text">Задача: [[${{task.created}}]]</title>
 </head>
 <body>
 <div class="container-fluid p-0">
@@ -19,6 +19,10 @@
                             <label class="font-weight-bold">Состояние:&nbsp;</label>
                             <div class="font-weight-bold text-success" th:if="${task.done}">Выполнено</div>
                             <div class="font-weight-bold text-primary" th:unless="${task.done}">Не выполнено</div>
+                        </div>
+                        <div class="row">
+                            <span class="font-weight-bold">Владелец:&nbsp;</span>
+                            <span th:text="*{user.name}"></span>
                         </div>
                         <div class="row">
                             <span class="font-weight-bold">Время создания:&nbsp;</span>

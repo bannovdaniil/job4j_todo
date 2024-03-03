@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
+import ru.job4j.model.User;
 import ru.job4j.service.TaskService;
 
 import java.util.Optional;
@@ -126,11 +127,11 @@ public class TaskController {
      * Создания задачи.
      */
     @PostMapping("/tasks/add")
-    public String addTask(@ModelAttribute TaskInDto dto, Model model) {
+    public String addTask(@ModelAttribute TaskInDto dto, Model model, @SessionAttribute(name = "userLogged") User user) {
         TaskOutDto task;
 
         try {
-            task = taskService.save(dto);
+            task = taskService.save(dto, user);
             model.addAttribute("task", task);
         } catch (Exception e) {
             model.addAttribute("error", "Не удалось создать задачу.");

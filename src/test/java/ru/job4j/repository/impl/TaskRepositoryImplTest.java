@@ -14,8 +14,11 @@ import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import ru.job4j.exception.UniqueConstraintException;
 import ru.job4j.model.Task;
+import ru.job4j.model.User;
 import ru.job4j.repository.TaskRepository;
+import ru.job4j.repository.UserRepository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,6 +27,7 @@ import java.util.Properties;
 
 class TaskRepositoryImplTest {
     private static TaskRepository taskRepository;
+    private static UserRepository userRepository;
 
     @BeforeAll
     public static void initRepositories() throws Exception {
@@ -41,6 +45,7 @@ class TaskRepositoryImplTest {
         CrudRepository crudRepository = new CrudRepository(sessionFactory);
         initLiquibase(sessionFactory, liquibaseSchema);
         taskRepository = new TaskRepositoryImpl(crudRepository);
+        userRepository = new UserRepositoryImpl(crudRepository);
     }
 
     public static void initLiquibase(SessionFactory sessionFactory, String defaultLiquibaseChangelog) {
@@ -63,12 +68,17 @@ class TaskRepositoryImplTest {
         taskRepository.findAll().forEach(
                 task -> taskRepository.delete(task.getId())
         );
+        userRepository.findAll().forEach(
+                user -> userRepository.delete(user.getId())
+        );
     }
 
     @DisplayName("Save + findById")
     @Test
-    void save() {
-        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false);
+    void save() throws UniqueConstraintException {
+        User user = new User(0, "testUser", "login", "password");
+        user = userRepository.save(user);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false, user);
         task = taskRepository.save(task);
         Task resultTask = taskRepository.findById(task.getId()).orElseThrow();
 
@@ -77,12 +87,14 @@ class TaskRepositoryImplTest {
 
     @DisplayName("update description, status, BUT not CreateTime")
     @Test
-    void update() {
+    void update() throws UniqueConstraintException {
         String expectedDescription = "Update Description";
         LocalDateTime expectedTime = LocalDateTime.now().withNano(0);
         boolean expectedStatus = true;
 
-        Task task = new Task(0, "task name", "test task", expectedTime, false);
+        User user = new User(0, "testUser", "login", "password");
+        user = userRepository.save(user);
+        Task task = new Task(0, "task name", "test task", expectedTime, false, user);
         task = taskRepository.save(task);
         task = taskRepository.findById(task.getId()).orElseThrow();
 
@@ -99,8 +111,10 @@ class TaskRepositoryImplTest {
     }
 
     @Test
-    void delete() {
-        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false);
+    void delete() throws UniqueConstraintException {
+        User user = new User(0, "testUser", "login", "password");
+        user = userRepository.save(user);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false, user);
 
         task = taskRepository.save(task);
         Assertions.assertTrue(taskRepository.findById(task.getId()).isPresent());
@@ -110,9 +124,11 @@ class TaskRepositoryImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAll() throws UniqueConstraintException {
         int beforeSize = taskRepository.findAll().size();
-        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false);
+        User user = new User(0, "testUser", "login", "password");
+        user = userRepository.save(user);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), false, user);
         task = taskRepository.save(task);
 
         int afterSize = taskRepository.findAll().size();
@@ -126,9 +142,11 @@ class TaskRepositoryImplTest {
             "true",
             "false"
     })
-    void findAllByStatus(Boolean status) {
+    void findAllByStatus(Boolean status) throws UniqueConstraintException {
         int beforeSize = taskRepository.findAllByStatus(status).size();
-        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), status);
+        User user = new User(0, "testUser", "login", "password");
+        user = userRepository.save(user);
+        Task task = new Task(0, "task name", "test task", LocalDateTime.now(), status, user);
         task = taskRepository.save(task);
 
         int afterSize = taskRepository.findAllByStatus(status).size();

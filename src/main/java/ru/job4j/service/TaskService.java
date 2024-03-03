@@ -3,12 +3,13 @@ package ru.job4j.service;
 import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
+import ru.job4j.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
-    TaskOutDto save(TaskInDto dto);
+    TaskOutDto save(TaskInDto dto, User userLogged);
 
     TaskOutDto update(TaskUpdateDto dto);
 

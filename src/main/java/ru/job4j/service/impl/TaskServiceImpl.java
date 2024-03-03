@@ -7,6 +7,7 @@ import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
 import ru.job4j.mapper.TaskMapper;
 import ru.job4j.model.Task;
+import ru.job4j.model.User;
 import ru.job4j.repository.TaskRepository;
 import ru.job4j.service.TaskService;
 
@@ -21,9 +22,10 @@ public class TaskServiceImpl implements TaskService {
     private final TaskMapper taskMapper;
 
     @Override
-    public TaskOutDto save(TaskInDto dto) {
+    public TaskOutDto save(TaskInDto dto, User userLogged) {
         Task task = taskMapper.map(dto);
         task.setDone(false);
+        task.setUser(userLogged);
         task.setCreated(LocalDateTime.now());
 
         return taskMapper.map(taskRepository.save(task));

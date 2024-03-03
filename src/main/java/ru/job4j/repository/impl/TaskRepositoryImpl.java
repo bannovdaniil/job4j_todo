@@ -22,7 +22,18 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void update(Task task) {
-        crudRepository.run(session -> session.merge(task));
+        crudRepository.run("""
+                        UPDATE Task t
+                        SET t.done = :done,
+                            t.title = :title,
+                            t.description = :description
+                        WHERE t.id = :taskId
+                        """,
+                Map.of("done", task.isDone(),
+                        "title", task.getTitle(),
+                        "description", task.getDescription(),
+                        "taskId", task.getId())
+        );
     }
 
     /**

@@ -23,5 +23,6 @@ public class TaskOutDto {
     private String title;
     private String description;
     private LocalDateTime created;
+    private UserOutDto user;
     private boolean done;
 }
