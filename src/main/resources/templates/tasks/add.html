@@ -15,6 +15,15 @@
                         <p class="text-danger" th:text="${error}"></p>
                     </div>
                     <div class="mb-3">
+                        <label for="priority">Приоритет</label>
+                        <select class="form-control custom-select" id="priority" name="priority.id">
+                            <option th:each="priority : ${priorities}"
+                                    th:value="${priority.id}"
+                                    th:text="${priority.description}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="title">Название</label>
                         <input class="form-control" id="title" name="title" placeholder="Сходить за хлебом" required size="128" type="text">
                     </div>

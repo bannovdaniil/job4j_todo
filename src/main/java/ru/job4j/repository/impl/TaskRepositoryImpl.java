@@ -22,18 +22,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public void update(Task task) {
-        crudRepository.run("""
-                        UPDATE Task t
-                        SET t.done = :done,
-                            t.title = :title,
-                            t.description = :description
-                        WHERE t.id = :taskId
-                        """,
-                Map.of("done", task.isDone(),
-                        "title", task.getTitle(),
-                        "description", task.getDescription(),
-                        "taskId", task.getId())
-        );
+        crudRepository.run(session -> session.merge(task));
     }
 
     /**
@@ -57,7 +46,7 @@ public class TaskRepositoryImpl implements TaskRepository {
      */
     @Override
     public List<Task> findAll() {
-        return crudRepository.query("FROM Task t", Task.class);
+        return crudRepository.query("FROM Task t JOIN FETCH t.priority", Task.class);
     }
 
     /**
@@ -69,14 +58,14 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Optional<Task> findById(int taskId) {
         return crudRepository.optional(
-                "FROM Task t WHERE t.id = :taskId", Task.class,
+                "FROM Task t JOIN FETCH t.priority WHERE t.id = :taskId", Task.class,
                 Map.of("taskId", taskId)
         );
     }
 
     @Override
     public List<Task> findAllByStatus(Boolean status) {
-        return crudRepository.query("FROM Task t WHERE t.done = :done", Task.class,
+        return crudRepository.query("FROM Task t JOIN FETCH t.priority WHERE t.done = :done", Task.class,
                 Map.of("done", status));
     }
 

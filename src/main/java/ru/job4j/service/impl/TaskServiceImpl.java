@@ -8,6 +8,7 @@ import ru.job4j.dto.TaskUpdateDto;
 import ru.job4j.mapper.TaskMapper;
 import ru.job4j.model.Task;
 import ru.job4j.model.User;
+import ru.job4j.repository.PriorityRepository;
 import ru.job4j.repository.TaskRepository;
 import ru.job4j.service.TaskService;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final PriorityRepository priorityRepository;
     private final TaskMapper taskMapper;
 
     @Override
@@ -27,6 +29,7 @@ public class TaskServiceImpl implements TaskService {
         task.setDone(false);
         task.setUser(userLogged);
         task.setCreated(LocalDateTime.now());
+        task.setPriority(priorityRepository.findById(task.getPriority().getId()).get());
 
         return taskMapper.map(taskRepository.save(task));
     }
@@ -34,6 +37,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskOutDto update(TaskUpdateDto dto) {
         Task task = taskMapper.map(dto);
+        User taskUser = taskRepository.findById(task.getId()).get().getUser();
+        task.setUser(taskUser);
         taskRepository.update(task);
         return taskMapper.map(taskRepository.findById(task.getId()).get());
     }

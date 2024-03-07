@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.job4j.model.Priority;
 
 /**
  * Сущность заданий для формы создания.
@@ -17,4 +18,5 @@ import lombok.Setter;
 public class TaskInDto {
     private String title;
     private String description;
+    private Priority priority;
 }

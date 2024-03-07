@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.job4j.model.Priority;
 
 import java.time.LocalDateTime;
 
@@ -25,4 +26,5 @@ public class TaskOutDto {
     private LocalDateTime created;
     private UserOutDto user;
     private boolean done;
+    private Priority priority;
 }

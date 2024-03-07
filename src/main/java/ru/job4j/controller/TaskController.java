@@ -8,8 +8,10 @@ import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
 import ru.job4j.model.User;
+import ru.job4j.service.PriorityService;
 import ru.job4j.service.TaskService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -17,13 +19,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
+    private final PriorityService priorityService;
 
     /**
      * Стартовая страница - список задач
      */
     @GetMapping("/")
     public String getList(Model model) {
-        model.addAttribute("tasks", taskService.findAll());
+        List<TaskOutDto> all = taskService.findAll();
+        model.addAttribute("tasks", all);
         return "tasks/list";
     }
 
@@ -88,6 +92,7 @@ public class TaskController {
             return "errors/error";
         }
         model.addAttribute("task", dto.get());
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/edit";
     }
 
@@ -105,7 +110,8 @@ public class TaskController {
      * Страница с формой для создания задачи.
      */
     @GetMapping("/tasks/add")
-    public String addTaskPage() {
+    public String addTaskPage(Model model) {
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/add";
     }
 
