@@ -46,7 +46,11 @@ public class TaskRepositoryImpl implements TaskRepository {
      */
     @Override
     public List<Task> findAll() {
-        return crudRepository.query("FROM Task t JOIN FETCH t.priority", Task.class);
+        return crudRepository.query("""
+                    FROM Task t
+                        LEFT JOIN FETCH t.priority
+                        LEFT JOIN FETCH t.categories
+                """, Task.class);
     }
 
     /**
@@ -58,14 +62,24 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     public Optional<Task> findById(int taskId) {
         return crudRepository.optional(
-                "FROM Task t JOIN FETCH t.priority WHERE t.id = :taskId", Task.class,
+                """
+                        FROM Task t
+                          LEFT JOIN FETCH t.priority
+                          LEFT JOIN FETCH t.categories
+                            WHERE t.id = :taskId
+                        """, Task.class,
                 Map.of("taskId", taskId)
         );
     }
 
     @Override
     public List<Task> findAllByStatus(Boolean status) {
-        return crudRepository.query("FROM Task t JOIN FETCH t.priority WHERE t.done = :done", Task.class,
+        return crudRepository.query("""
+                        FROM Task t
+                            LEFT JOIN FETCH t.priority
+                            LEFT JOIN FETCH t.categories
+                                WHERE t.done = :done
+                        """, Task.class,
                 Map.of("done", status));
     }
 

@@ -37,6 +37,20 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="category">Категория</label>
+                        <select class="form-control custom-select" data-live-search="true" size="4"
+                                id="category"
+                                name="categories[]"
+                                multiple="multiple"
+                        >
+                            <option th:each="category : ${categories}"
+                                    th:selected="${task.categories.contains(category)}"
+                                    th:value="${category.id}"
+                                    th:text="${category.name}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="title">Название</label>
                         <input class="form-control" id="title" name="title" required size="128" th:value="*{title}" type="text">
                     </div>

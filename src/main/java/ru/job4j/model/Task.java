@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Сущность заданий.
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
  * description - описание
  * created - время создания
  * done - выполнено
+ * priority - приоритет задания
+ * categories - категории задания.
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,7 +39,16 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "priority_id")
     private Priority priority;
+
+    @ManyToMany
+    @JoinTable(
+            name = "tasks_categories",
+            joinColumns = {@JoinColumn(name = "task_id")},
+            inverseJoinColumns = {@JoinColumn(name = "category_id")}
+    )
+    private Set<Category> categories = new HashSet<>();
+
 }

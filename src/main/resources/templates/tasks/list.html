@@ -40,7 +40,8 @@
                         <th class="col-auto" scope="col">Приоритет</th>
                         <th class="col-auto" scope="col">Владелец</th>
                         <th class="col-auto" scope="col">Время создания</th>
-                        <th class="col-6" scope="col">Название</th>
+                        <th class="col-auto" scope="col">Категория</th>
+                        <th class="col-5" scope="col">Название</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,6 +60,10 @@
                         <td th:text="${task.priority.description}"/>
                         <td th:text="${task.user.name}"/>
                         <td th:text="${{task.created}}"/>
+                        <td>
+                        <span th:each="category, iterStat : ${task.categories}"
+                              th:text="${category.name} + ${!iterStat.last ? ', ' : ''}"></span>
+                        </td>
                         <td>
                             <a th:href="@{/tasks/{taskId}(taskId=${task.id})}" th:text="${task.title}"> </a>
                         </td>

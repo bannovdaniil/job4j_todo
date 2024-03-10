@@ -8,6 +8,7 @@ import ru.job4j.dto.TaskInDto;
 import ru.job4j.dto.TaskOutDto;
 import ru.job4j.dto.TaskUpdateDto;
 import ru.job4j.model.User;
+import ru.job4j.service.CategoryService;
 import ru.job4j.service.PriorityService;
 import ru.job4j.service.TaskService;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class TaskController {
     private final TaskService taskService;
     private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
     /**
      * Стартовая страница - список задач
@@ -93,6 +95,7 @@ public class TaskController {
         }
         model.addAttribute("task", dto.get());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/edit";
     }
 
@@ -104,15 +107,6 @@ public class TaskController {
         TaskOutDto task = taskService.update(dto);
         model.addAttribute("task", task);
         return "tasks/one";
-    }
-
-    /**
-     * Страница с формой для создания задачи.
-     */
-    @GetMapping("/tasks/add")
-    public String addTaskPage(Model model) {
-        model.addAttribute("priorities", priorityService.findAll());
-        return "tasks/add";
     }
 
     /**
@@ -130,10 +124,22 @@ public class TaskController {
     }
 
     /**
+     * Страница с формой для создания задачи.
+     */
+    @GetMapping("/tasks/add")
+    public String addTaskPage(Model model) {
+        model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
+        return "tasks/add";
+    }
+
+    /**
      * Создания задачи.
      */
     @PostMapping("/tasks/add")
-    public String addTask(@ModelAttribute TaskInDto dto, Model model, @SessionAttribute(name = "userLogged") User user) {
+    public String addTask(@ModelAttribute TaskInDto dto,
+                          Model model,
+                          @SessionAttribute(name = "userLogged") User user) {
         TaskOutDto task;
 
         try {
