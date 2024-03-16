@@ -26,6 +26,19 @@
                         <label class="form-label" for="password"><b>Пароль</b></label>
                         <input class="form-control" id="password" name="password" required type="password">
                     </div>
+                    <div class="mb-3">
+<!--                        <label class="form-label" for="zones"><b>Пояс времени:</b></label>-->
+<!--                        <select class="form-control custom-select" data-live-search="true" id="zones" name="timezone">-->
+<!--                            <option th:each="zone, iterStat : ${zones}"-->
+<!--                                    th:value="${zone.getID}"-->
+<!--                                    th:text="${zone.getID}">-->
+<!--                            </option>-->
+<!--                        </select>-->
+                        <label for="zones" class="form-label"><b>Часовой пояс</b></label> <br/>
+                        <select class="form-control" id="zones" name="timezone">
+                            <option th:each="zone : ${zones}" th:value="${zone.id}" th:text="${zone.displayName + ' (' +zone.id + ')'}">
+                        </select>
+                    </div>
                     <div class="col-12">
                         <div class="row justify-content-end">
                             <div class="col-3"><a class="btn btn-danger w-100" th:href="@{/static}">Отмена</a></div>

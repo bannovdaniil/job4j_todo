@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.job4j.dto.TimeZoneOutDto;
 import ru.job4j.dto.UserCreateDto;
 import ru.job4j.dto.UserLoginDto;
 import ru.job4j.dto.UserOutDto;
@@ -16,7 +17,11 @@ import ru.job4j.exception.UniqueConstraintException;
 import ru.job4j.model.User;
 import ru.job4j.service.UserService;
 
+import java.time.ZoneId;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 /**
  * Ручка для работы с Пользователями
@@ -56,7 +61,8 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String getRegistrationPage() {
+    public String getRegistrationPage(Model model) {
+        model.addAttribute("zones", getTimeZoneSortedList());
         return "users/register";
     }
 
@@ -69,12 +75,23 @@ public class UserController {
             model.addAttribute("userLogged", user.get());
         } catch (UniqueConstraintException e) {
             model.addAttribute("error", "Пользователь с таким Логином уже существует.");
+            model.addAttribute("zones", getTimeZoneSortedList());
             return "users/register";
         } catch (Exception e) {
             model.addAttribute("error", "Не удалось создать пользователя.");
+            model.addAttribute("zones", getTimeZoneSortedList());
             return "users/register";
         }
 
         return "redirect:/users/login";
+    }
+
+    private List<TimeZoneOutDto> getTimeZoneSortedList() {
+        List<TimeZoneOutDto> zones = ZoneId.getAvailableZoneIds().stream()
+                .map(TimeZone::getTimeZone)
+                .map(zone -> new TimeZoneOutDto(zone.getID(), zone.getDisplayName()))
+                .sorted(Comparator.comparing(TimeZoneOutDto::getDisplayName))
+                .toList();
+        return zones;
     }
 }
